@@ -17,7 +17,7 @@ jobs:
       image: andersondarioo/packer-ansible:1.0.0
     strategy:
         matrix:
-          subfolder: [ prometheus, grafana ]
+          subfolder: [ prometheus ]
         fail-fast: true
 
     steps:
