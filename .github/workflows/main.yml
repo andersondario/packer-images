@@ -5,15 +5,18 @@ on:
     branches:
       - main
 
+env: 
+  PROJECT_ID: aa-devops
+  ZONE: us
+  HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
+  HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
+  PROMETHEUS_BASIC_AUTH_PASS: ${{ secrets.PROMETHEUS_BASIC_AUTH_PASS }}
+
 jobs:
   build:
     runs-on: ubuntu-20.04
     container:
       image: andersondarioo/packer-ansible:1.0.0
-      env:
-        HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
-        HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
-        PROMETHEUS_BASIC_AUTH_PASS: ${{ secrets.PROMETHEUS_BASIC_AUTH_PASS }}
     strategy:
         matrix:
           subfolder: [ prometheus, grafana ]
@@ -22,12 +25,17 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    
+
+    - name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v0.4.0'
+      with:
+        credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+        
     - name: Build image
       run: | 
         cd ${{ matrix.subfolder }}
         sh pre-build.sh
-        packer build .
+        packer build -var "project_id=$PROJECT" -var "zone=$ZONE" .
       
     # - name: Publish image
     #   run: packer push -name packer-$subfolder-$TIMESTAMP .
