@@ -22,7 +22,7 @@ jobs:
       uses: hashicorp/setup-packer@v1
       
     - name: Set up Ansible
-      uses: hashicorp/setup-ansible@v1
+      run: python3 -m pip install ansible
     
     - name: Build image
       run: | 
