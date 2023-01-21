@@ -2,6 +2,14 @@ locals {
   timestamp = regex_replace(timestamp(), "[- TZ:]", "")
 }
 
+source "googlecompute" "prometheus-image" {
+  source_image_family = "centos-7"
+  image_name          = "packer-prometheus-${local.timestamp}"
+  image_description   = "Prometheus Web Server"
+  ssh_username        = "packer"
+  tags                = ["packer"]
+}
+
 build {
   sources = ["sources.googlecompute.prometheus-image"]
 
@@ -14,13 +22,4 @@ build {
     playbook_file = "./playbook.yml"
     use_proxy     = false
   }
-}
-
-
-source "googlecompute" "prometheus-image" {
-  source_image_family = "centos-7"
-  image_name          = "packer-prometheus-${local.timestamp}"
-  image_description   = "Prometheus Web Server"
-  ssh_username        = "packer"
-  tags                = ["packer"]
 }
