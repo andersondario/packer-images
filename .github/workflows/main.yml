@@ -12,6 +12,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-20.04
+    container:
+      image: andersondarioo/packer-ansible:1.0.0
     strategy:
         matrix:
           subfolder: [ prometheus, grafana ]
@@ -20,12 +22,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-
-    - name: Set up Packer
-      uses: hashicorp/setup-packer@v2.0.0
-      
-    - name: Set up Ansible
-      run: python3 -m pip install ansible
     
     - name: Build image
       run: | 
