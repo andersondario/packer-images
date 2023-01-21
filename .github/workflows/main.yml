@@ -27,7 +27,7 @@ jobs:
     - name: Build image
       run: | 
         cd $subfolder
-        sh pre-build.sh
+        bash pre-build.sh
         packer build .
       
     # - name: Publish image
