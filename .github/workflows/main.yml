@@ -21,7 +21,7 @@ jobs:
     - name: Get subfolders
       id: set-matrix
       run: |
-        SUBFOLDERS=$(find . -type d -not -path '*/\.*' -name "*packer*" -printf '%P\n' | tr '\n' ',')
+        SUBFOLDERS=$(find . -type d -not -path '*/\.*' -printf '%P\n' | tr '\n' ',')
         echo "::set-output name=SUBFOLDERS::$SUBFOLDERS"
     outputs:
       SUBFOLDERS: ${{ steps.set-matrix.outputs.SUBFOLDERS }}
