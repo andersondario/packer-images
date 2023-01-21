@@ -5,15 +5,15 @@ on:
     branches:
       - main
 
-env:
-  HASHICORP_CLOUD_TOKEN: ${{ secrets.HASHICORP_CLOUD_TOKEN }}
-  PROMETHEUS_BASIC_AUTH_PASS: ${{ secrets.PROMETHEUS_BASIC_AUTH_PASS }}
-
 jobs:
   build:
     runs-on: ubuntu-20.04
     container:
       image: andersondarioo/packer-ansible:1.0.0
+      env:
+        HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
+        HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
+        PROMETHEUS_BASIC_AUTH_PASS: ${{ secrets.PROMETHEUS_BASIC_AUTH_PASS }}
     strategy:
         matrix:
           subfolder: [ prometheus, grafana ]
