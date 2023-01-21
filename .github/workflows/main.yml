@@ -26,8 +26,8 @@ jobs:
     
     - name: Build image
       run: | 
-        cd {{ matrix.subfolder }}
-        ./pre-build.sh
+        cd ${{ matrix.subfolder }}
+        sh pre-build.sh
         packer build .
       
     # - name: Publish image
