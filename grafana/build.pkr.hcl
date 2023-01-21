@@ -1,3 +1,6 @@
+variable project_id {}
+variable zone {}
+
 locals {
   timestamp = regex_replace(timestamp(), "[- TZ:]", "")
 }

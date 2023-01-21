@@ -34,7 +34,6 @@ jobs:
     - name: Build image
       run: | 
         cd ${{ matrix.subfolder }}
-        sh pre-build.sh
         packer build -var "project_id=$PROJECT" -var "zone=$ZONE" .
       
     # - name: Publish image
