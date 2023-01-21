@@ -16,7 +16,6 @@ jobs:
         matrix:
           subfolder: [ prometheus, grafana ]
         fail-fast: true
-    needs: [ setup ]
 
     steps:
     - name: Set up Packer
