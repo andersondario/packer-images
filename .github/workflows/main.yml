@@ -19,7 +19,7 @@ jobs:
 
     steps:
     - name: Set up Packer
-      uses: hashicorp/setup-packer@v1
+      uses: hashicorp/setup-packer@v2.0.0
       
     - name: Set up Ansible
       run: python3 -m pip install ansible
