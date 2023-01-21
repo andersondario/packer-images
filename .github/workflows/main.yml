@@ -7,8 +7,7 @@ on:
 
 env:
   HASHICORP_CLOUD_TOKEN: ${{ secrets.HASHICORP_CLOUD_TOKEN }}
-  TIMESTAMP: ${{ env.TIMESTAMP }}
-  PROMETHEUS_BASIC_AUTH_PASS: ${{ env.PROMETHEUS_BASIC_AUTH_PASS }}
+  PROMETHEUS_BASIC_AUTH_PASS: ${{ secrets.PROMETHEUS_BASIC_AUTH_PASS }}
   SUBFOLDERS: ""
 
 jobs:
@@ -30,6 +29,7 @@ jobs:
         matrix:
           subfolder: ${{ env.SUBFOLDERS }}
         fail-fast: true
+    needs: [ setup ]
 
     steps:
     - name: Set up Packer
@@ -44,6 +44,6 @@ jobs:
         sh pre-build.sh
         packer build .
       
-    - name: Publish image
-      run: packer push -name packer-$subfolder-$TIMESTAMP .
+    # - name: Publish image
+    #   run: packer push -name packer-$subfolder-$TIMESTAMP .
     
