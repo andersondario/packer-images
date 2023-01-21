@@ -32,7 +32,7 @@ jobs:
     - name: Build image
       run: | 
         cd ${{ matrix.subfolder }}
-        packer build -var "project_id=aa-devops" -var "zone=us" .
+        packer build -var "project_id=aa-devops" -var "zone=us-central1-a" .
       
     # - name: Publish image
     #   run: packer push -name packer-$subfolder-$TIMESTAMP .
