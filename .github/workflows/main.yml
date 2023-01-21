@@ -1,0 +1,49 @@
+name: Build and Publish VM Image
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  HASHICORP_CLOUD_TOKEN: ${{ secrets.HASHICORP_CLOUD_TOKEN }}
+  TIMESTAMP: ${{ env.TIMESTAMP }}
+  PROMETHEUS_BASIC_AUTH_PASS: ${{ env.PROMETHEUS_BASIC_AUTH_PASS }}
+  SUBFOLDERS: ""
+
+jobs:
+  setup:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Get subfolders
+      run: |
+        SUBFOLDERS=$(find . -type d -not -path '*/\.*' -name "*packer*" -printf '%P\n' | tr '\n' ',')
+        echo "::set-env name=SUBFOLDERS::$SUBFOLDERS"
+
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+        matrix:
+          subfolder: ${{ env.SUBFOLDERS }}
+        fail-fast: true
+
+    steps:
+    - name: Set up Packer
+      uses: hashicorp/setup-packer@v1
+      
+    - name: Set up Ansible
+      uses: hashicorp/setup-ansible@v1
+    
+    - name: Build image
+      run: | 
+        cd $subfolder
+        sh pre-build.sh
+        packer build .
+      
+    - name: Publish image
+      run: packer push -name packer-$subfolder-$TIMESTAMP .
+    

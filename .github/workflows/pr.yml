@@ -1,0 +1,46 @@
+name: Validate Pull Request
+
+on:
+  pull_request:
+    branches: 
+      - master
+
+env:
+  HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
+  HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
+  TIMESTAMP: ${{ env.TIMESTAMP }}
+  SUBFOLDERS: ""
+
+jobs:
+  setup:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Get subfolders
+      run: |
+        SUBFOLDERS=$(find . -type d -not -path '*/\.*' -name "*packer*" -printf '%P\n' | tr '\n' ',')
+        echo "::set-env name=SUBFOLDERS::$SUBFOLDERS"
+
+  validate:
+    runs-on: ubuntu-20.04
+    strategy:
+        matrix:
+          subfolder: ${{ env.SUBFOLDERS }}
+        fail-fast: true
+
+    steps:
+    - name: Set up Packer
+      uses: hashicorp/setup-packer@v1
+      
+    - name: Set up Ansible
+      uses: hashicorp/setup-ansible@v1
+    
+    - name: Validate Files
+      run: | 
+        packer fmt -recursive -check .
+        cd $subfolder
+        packer validate .
+          
