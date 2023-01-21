@@ -21,7 +21,7 @@ jobs:
     - name: Get subfolders
       id: set-matrix
       run: |
-        SUBFOLDERS=$(find . -type d -not -path '*/\.*' -printf '%P\n' | tr '\n' ',')
+        SUBFOLDERS=$(find . -maxdepth 1 -type d -not -path '*/\.*' -printf '%P\n' | tr '\n' ',')
         echo "::set-output name=SUBFOLDERS::$SUBFOLDERS"
     outputs:
       SUBFOLDERS: ${{ steps.set-matrix.outputs.SUBFOLDERS }}
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
         matrix:
-          subfolder: ${{ fromJson(needs.setup.outputs.SUBFOLDERS) }}
+          subfolder: ${{ needs.setup.outputs.SUBFOLDERS }}
         fail-fast: true
     needs: [ setup ]
 
