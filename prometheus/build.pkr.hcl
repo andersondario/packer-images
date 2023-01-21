@@ -3,6 +3,8 @@ locals {
 }
 
 source "googlecompute" "prometheus-image" {
+  project_id          = var.project_id
+  zone                = var.zone
   source_image_family = "centos-7"
   image_name          = "packer-prometheus-${local.timestamp}"
   image_description   = "Prometheus Web Server"
