@@ -8,6 +8,7 @@ build {
   hcp_packer_registry {
     bucket_name = "packer-prometheus-images"
     description = "Bucket used to store Prometheus images."
+  }
 
   provisioner "ansible" {
     playbook_file = "./playbook.yml"

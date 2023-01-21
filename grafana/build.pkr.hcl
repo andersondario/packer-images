@@ -8,6 +8,7 @@ build {
   hcp_packer_registry {
     bucket_name = "packer-grafana-images"
     description = "Bucket used to store Grafana images."
+  }
 
   provisioner "ansible" {
     playbook_file = "./playbook.yml"
