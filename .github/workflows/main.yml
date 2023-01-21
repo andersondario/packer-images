@@ -8,29 +8,13 @@ on:
 env:
   HASHICORP_CLOUD_TOKEN: ${{ secrets.HASHICORP_CLOUD_TOKEN }}
   PROMETHEUS_BASIC_AUTH_PASS: ${{ secrets.PROMETHEUS_BASIC_AUTH_PASS }}
-  SUBFOLDERS: ""
 
 jobs:
-  setup:
-    runs-on: ubuntu-20.04
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Get subfolders
-      id: set-matrix
-      run: |
-        SUBFOLDERS=$(find . -maxdepth 1 -type d -not -path '*/\.*' -printf '%P\n' | tr '\n' ',')
-        echo "::set-output name=SUBFOLDERS::$SUBFOLDERS"
-    outputs:
-      SUBFOLDERS: ${{ steps.set-matrix.outputs.SUBFOLDERS }}
-
   build:
     runs-on: ubuntu-20.04
     strategy:
         matrix:
-          subfolder: ${{ needs.setup.outputs.SUBFOLDERS }}
+          subfolder: [ prometheus, grafana ]
         fail-fast: true
     needs: [ setup ]
 
