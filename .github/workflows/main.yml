@@ -18,7 +18,7 @@ jobs:
     strategy:
         matrix:
           subfolder: [ prometheus ]
-        fail-fast: true
+        fail-fast: false
 
     steps:
     - name: Checkout

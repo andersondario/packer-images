@@ -3,44 +3,28 @@ name: Validate Pull Request
 on:
   pull_request:
     branches: 
-      - master
+      - main
 
-env:
+env: 
   HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
   HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
-  TIMESTAMP: ${{ env.TIMESTAMP }}
-  SUBFOLDERS: ""
+  PROMETHEUS_BASIC_AUTH_PASS: ${{ secrets.PROMETHEUS_BASIC_AUTH_PASS }}
 
 jobs:
-  setup:
+  build:
     runs-on: ubuntu-20.04
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Get subfolders
-      run: |
-        SUBFOLDERS=$(find . -type d -not -path '*/\.*' -name "*packer*" -printf '%P\n' | tr '\n' ',')
-        echo "::set-env name=SUBFOLDERS::$SUBFOLDERS"
-
-  validate:
-    runs-on: ubuntu-20.04
+    container:
+      image: andersondarioo/packer-ansible:1.0.0
     strategy:
         matrix:
-          subfolder: ${{ env.SUBFOLDERS }}
-        fail-fast: true
+          subfolder: [ prometheus ]
+        fail-fast: false
 
     steps:
-    - name: Set up Packer
-      uses: hashicorp/setup-packer@v1
-      
-    - name: Set up Ansible
-      uses: hashicorp/setup-ansible@v1
-    
-    - name: Validate Files
+    - name: Checkout
+      uses: actions/checkout@v3
+        
+    - name: Validate image
       run: | 
-        packer fmt -recursive -check .
-        cd $subfolder
-        packer validate .
-          
+        cd ${{ matrix.subfolder }}
+        packer fmt -rescursive -check .
