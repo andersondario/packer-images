@@ -10,7 +10,7 @@ env:
   HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-20.04
     container:
       image: andersondarioo/packer-ansible:1.0.0
