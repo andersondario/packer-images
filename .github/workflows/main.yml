@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - main
-
+    paths-ignore:
+        - '**/README.md'
 env: 
   HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
   HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
