@@ -8,7 +8,6 @@ on:
 env: 
   HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
   HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
-  PROMETHEUS_BASIC_AUTH_PASS: ${{ secrets.PROMETHEUS_BASIC_AUTH_PASS }}
 
 jobs:
   build:
@@ -34,6 +33,4 @@ jobs:
         cd ${{ matrix.subfolder }}
         packer build -var "project_id=aa-devops" -var "zone=us-central1-a" .
       
-    # - name: Publish image
-    #   run: packer push -name packer-$subfolder-$TIMESTAMP .
     

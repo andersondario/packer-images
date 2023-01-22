@@ -8,7 +8,6 @@ on:
 env: 
   HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
   HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
-  PROMETHEUS_BASIC_AUTH_PASS: ${{ secrets.PROMETHEUS_BASIC_AUTH_PASS }}
 
 jobs:
   build:
@@ -27,4 +26,5 @@ jobs:
     - name: Validate image
       run: | 
         cd ${{ matrix.subfolder }}
-        packer fmt -rescursive -check .
+        packer validate -var "project_id=aa-devops" -var "zone=us-central1-a" .
+        packer fmt -check .
